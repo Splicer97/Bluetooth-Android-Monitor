@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/id_connect"
+        android:icon="@drawable/ic_baseline_bluetooth_connected_24"
+        android:orderInCategory="100"
+        android:title="Connect"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/id_list"
+        android:icon="@drawable/ic_baseline_format_list_bulleted_24"
+        android:orderInCategory="200"
+        android:title="Bt List"
+        app:showAsAction="ifRoom" />
+</menu>
