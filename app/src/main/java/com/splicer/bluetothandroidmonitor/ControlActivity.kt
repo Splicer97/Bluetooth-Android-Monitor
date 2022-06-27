@@ -11,7 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.splicer.bluetothandroidmonitor.databinding.ActivityControlBinding
 
-class ControlActivity : AppCompatActivity() {
+class ControlActivity : AppCompatActivity(), ReceiveThread.Listener {
     private lateinit var binding: ActivityControlBinding
     private lateinit var actListLauncher: ActivityResultLauncher<Intent>
     lateinit var btConnection: BtConnection
@@ -34,10 +34,10 @@ class ControlActivity : AppCompatActivity() {
 
     }
 
-    private fun init(){
+    private fun init() {
         val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val btAdapter = btManager.adapter
-        btConnection = BtConnection(btAdapter)
+        btConnection = BtConnection(btAdapter, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -46,9 +46,9 @@ class ControlActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.id_list){
+        if (item.itemId == R.id.id_list) {
             actListLauncher.launch(Intent(this, BtListActivity::class.java))
-        } else if(item.itemId == R.id.id_connect){
+        } else if (item.itemId == R.id.id_connect) {
             listItem.let {
                 btConnection.connect(it?.mac!!)
             }
@@ -56,12 +56,19 @@ class ControlActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun onBtListResult(){
+    private fun onBtListResult() {
         actListLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()){
-            if(it.resultCode == RESULT_OK){
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == RESULT_OK) {
                 listItem = it.data?.getSerializableExtra(BtListActivity.DEVICE_KEY) as ListItem
             }
+        }
+    }
+
+    override fun onRecieve(message: String) {
+        runOnUiThread {
+            binding.tvMessage.text = message
         }
     }
 }
