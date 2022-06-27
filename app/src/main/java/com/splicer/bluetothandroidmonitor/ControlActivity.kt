@@ -16,15 +16,25 @@ class ControlActivity : AppCompatActivity() {
     private lateinit var actListLauncher: ActivityResultLauncher<Intent>
     lateinit var btConnection: BtConnection
     private var listItem: ListItem? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityControlBinding.inflate(layoutInflater)
         setContentView(binding.root)
         onBtListResult()
         init()
+        binding.apply {
+            bA.setOnClickListener {
+                btConnection.sendMessage("A")
+            }
+            bB.setOnClickListener {
+                btConnection.sendMessage("B")
+            }
+        }
+
     }
 
-    private fun init() {
+    private fun init(){
         val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val btAdapter = btManager.adapter
         btConnection = BtConnection(btAdapter)
@@ -36,9 +46,9 @@ class ControlActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.id_list) {
+        if(item.itemId == R.id.id_list){
             actListLauncher.launch(Intent(this, BtListActivity::class.java))
-        } else if (item.itemId == R.id.id_connect) {
+        } else if(item.itemId == R.id.id_connect){
             listItem.let {
                 btConnection.connect(it?.mac!!)
             }
@@ -46,12 +56,12 @@ class ControlActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun onBtListResult() {
-        actListLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
-                    listItem = it.data?.getSerializableExtra(BtListActivity.DEVICE_KEY) as ListItem
-                }
+    private fun onBtListResult(){
+        actListLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()){
+            if(it.resultCode == RESULT_OK){
+                listItem = it.data?.getSerializableExtra(BtListActivity.DEVICE_KEY) as ListItem
             }
+        }
     }
 }

@@ -5,12 +5,12 @@
         android:id="@+id/id_connect"
         android:icon="@drawable/ic_baseline_bluetooth_connected_24"
         android:orderInCategory="100"
-        android:title="Connect"
+        android:title="@string/connect"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/id_list"
         android:icon="@drawable/ic_baseline_format_list_bulleted_24"
         android:orderInCategory="200"
-        android:title="Bt List"
+        android:title="@string/bt_list"
         app:showAsAction="ifRoom" />
 </menu>

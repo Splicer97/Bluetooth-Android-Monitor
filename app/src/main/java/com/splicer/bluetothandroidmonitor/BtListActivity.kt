@@ -15,6 +15,7 @@ class BtListActivity : AppCompatActivity(), RcAdapter.Listener {
     private var btAdapter: BluetoothAdapter? = null
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: RcAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -22,16 +23,16 @@ class BtListActivity : AppCompatActivity(), RcAdapter.Listener {
         init()
     }
 
-    private fun init() {
+    private fun init(){
         val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         btAdapter = btManager.adapter
         adapter = RcAdapter(this)
         binding.rcView.layoutManager = LinearLayoutManager(this)
         binding.rcView.adapter = adapter
-        getPairedDevices()
+        getPairedDevises()
     }
 
-    private fun getPairedDevices() {
+    private fun getPairedDevises(){
         val pairedDevices: Set<BluetoothDevice>? = btAdapter?.bondedDevices
         val tempList = ArrayList<ListItem>()
         pairedDevices?.forEach {
@@ -39,12 +40,13 @@ class BtListActivity : AppCompatActivity(), RcAdapter.Listener {
         }
         adapter.submitList(tempList)
     }
-    companion object {
-        const val  DEVICE_KEY = "device_key"
+
+    companion object{
+        const val DEVICE_KEY = "device_key"
     }
 
     override fun onClick(item: ListItem) {
-        val i = Intent().apply {
+        val i= Intent().apply {
             putExtra(DEVICE_KEY, item)
         }
         setResult(RESULT_OK, i)

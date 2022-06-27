@@ -8,26 +8,28 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.splicer.bluetothandroidmonitor.databinding.ListItemBinding
 
-class RcAdapter(private val listener: Listener) : ListAdapter<ListItem, RcAdapter.ItemHolder>(ItemCompatator()) {
-    class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
+class RcAdapter(private val listener: Listener) : ListAdapter<ListItem, RcAdapter.ItemHolder>(ItemComparator()) {
+
+    class ItemHolder(view: View) : RecyclerView.ViewHolder(view){
         val binding = ListItemBinding.bind(view)
-        fun setData(item: ListItem, listener: Listener) = with(binding) {
+
+        fun setData(item: ListItem, listener: Listener) = with(binding){
             tvName.text = item.name
             tvMac.text = item.mac
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 listener.onClick(item)
             }
         }
-
-        companion object {
-            fun create(parent: ViewGroup): ItemHolder {
-                return ItemHolder(
-                    LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
-                )
+        companion object{
+            fun create(parent: ViewGroup): ItemHolder{
+                return ItemHolder(LayoutInflater.
+                from(parent.context).
+                inflate(R.layout.list_item, parent, false))
             }
         }
     }
-    class ItemCompatator: DiffUtil.ItemCallback<ListItem>() {
+
+    class ItemComparator : DiffUtil.ItemCallback<ListItem>(){
         override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
             return oldItem.mac == newItem.mac
         }
@@ -45,7 +47,8 @@ class RcAdapter(private val listener: Listener) : ListAdapter<ListItem, RcAdapte
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.setData(getItem(position), listener)
     }
-    interface Listener {
+
+    interface Listener{
         fun onClick(item: ListItem)
     }
 }
